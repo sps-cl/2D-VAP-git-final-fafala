@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <title>To do list</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .addedClass {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        .checkbox {
+            display: none;
+        }
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .check-mark {
+            font-size: 16px;
+            color: #000;
+            display: none;
+            position: absolute;
+        }
+        .checkbox:checked + .custom-checkbox .check-mark {
+            display: block;
+        }
+        .checkbox:checked + .custom-checkbox {
+            background-color: #6B3B64;
+        }
+        .checkbox:checked + .custom-checkbox + .item-text {
+            color: black;
+        }
+        .checkbox:checked + .custom-checkbox {
+            background-color: #000;
+        }
+        .item-text {
+            flex-grow: 1;
+            position: relative;
+        }
+        .item-text:hover .hover-line {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .item-text:hover .custom-checkbox {
+            display: none;
+        }
+        .hover-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background-color: #000;
+            bottom: 50%;
+            left: 0;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+            transform-origin: bottom left;
+        }
+        .custom-checkbox:hover .hover-line {
+            transform: scaleX(0);
+        }
+        body {
+            background-color: #6B3B64;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>To Do list</h1>
+        <form id="todoForm">
+            <input type="text" id="todoInput">
+            <button type="button" onclick="addToDo()">Přidat položku</button>
+        </form>
+
+        <ul id="todoList"></ul>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        function addToDo() {
+            var item = document.getElementById('todoInput').value;
+            var text = document.createTextNode(item);
+            var newItem = document.createElement('li');
+
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.classList.add('checkbox');
+
+            var customCheckbox = document.createElement('div');
+            customCheckbox.classList.add('custom-checkbox');
+
+            var checkMark = document.createElement('span');
+            checkMark.classList.add('check-mark');
+            checkMark.innerHTML = "&#10005;";
+
+            customCheckbox.appendChild(checkMark);
+
+            var itemText = document.createElement('span');
+            itemText.classList.add('item-text');
+            itemText.appendChild(text);
+
+            newItem.appendChild(checkbox);
+            newItem.appendChild(itemText);
+            newItem.appendChild(customCheckbox);
+            newItem.classList.add('addedClass');
+
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    checkMark.style.display = 'block';
+                } else {
+                    checkMark.style.display = 'none';
+                }
+            });
+
+            customCheckbox.addEventListener('click', function(e) {
+                e.stopPropagation();
+                checkbox.click();
+            });
+
+            itemText.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    this.remove();
+                }
+            });
+
+            newItem.addEventListener('click', function(event) {
+                if (event.target !== checkbox && event.target !== customCheckbox) {
+                    this.remove();
+                }
+            });
+
+            document.getElementById('todoList').appendChild(newItem);
+        }
+    </script>
+</body>
+</html>
