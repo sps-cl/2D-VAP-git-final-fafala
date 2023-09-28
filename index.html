@@ -103,13 +103,13 @@
             checkbox.classList.add('checkbox');
 
             var customCheckbox = document.createElement('div');
-            
+          
 
             var checkMark = document.createElement('span');
             checkMark.classList.add('check-mark');
             checkMark.innerHTML = "&#10005;";
 
-           
+            
 
             var itemText = document.createElement('span');
             itemText.classList.add('item-text');
@@ -128,7 +128,18 @@
                 }
             });
 
-          
+            
+            itemText.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    this.remove();
+                }
+            });
+
+            newItem.addEventListener('click', function(event) {
+                if (event.target !== checkbox && event.target !== customCheckbox) {
+                    this.remove();
+                }
+            });
 
             document.getElementById('todoList').appendChild(newItem);
         }
